@@ -3,11 +3,11 @@ import type { ReactNode } from 'react'
 import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import {
-  RiAlertFill,
-  RiCheckboxCircleFill,
+  RiAlertLine,
+  RiCheckboxCircleLine,
   RiCloseLine,
-  RiErrorWarningFill,
-  RiInformation2Fill,
+  RiErrorWarningLine,
+  RiInformation2Line,
 } from '@remixicon/react'
 import { createContext, useContext } from 'use-context-selector'
 import ActionButton from '@/app/components/base/action-button'
@@ -61,10 +61,10 @@ const Toast = ({
     />
     <div className={`flex ${size === 'md' ? 'gap-1' : 'gap-0.5'}`}>
       <div className={`flex items-center justify-center ${size === 'md' ? 'p-0.5' : 'p-1'}`}>
-        {type === 'success' && <RiCheckboxCircleFill className={`${size === 'md' ? 'h-5 w-5' : 'h-4 w-4'} text-text-success`} aria-hidden="true" />}
-        {type === 'error' && <RiErrorWarningFill className={`${size === 'md' ? 'h-5 w-5' : 'h-4 w-4'} text-text-destructive`} aria-hidden="true" />}
-        {type === 'warning' && <RiAlertFill className={`${size === 'md' ? 'h-5 w-5' : 'h-4 w-4'} text-text-warning-secondary`} aria-hidden="true" />}
-        {type === 'info' && <RiInformation2Fill className={`${size === 'md' ? 'h-5 w-5' : 'h-4 w-4'} text-text-accent`} aria-hidden="true" />}
+        {type === 'success' && <RiCheckboxCircleLine className={`${size === 'md' ? 'h-5 w-5' : 'h-4 w-4'} text-text-success`} aria-hidden="true" />}
+        {type === 'error' && <RiErrorWarningLine className={`${size === 'md' ? 'h-5 w-5' : 'h-4 w-4'} text-text-destructive`} aria-hidden="true" />}
+        {type === 'warning' && <RiAlertLine className={`${size === 'md' ? 'h-5 w-5' : 'h-4 w-4'} text-text-warning-secondary`} aria-hidden="true" />}
+        {type === 'info' && <RiInformation2Line className={`${size === 'md' ? 'h-5 w-5' : 'h-4 w-4'} text-text-accent`} aria-hidden="true" />}
       </div>
       <div className={`flex py-1 ${size === 'md' ? 'px-1' : 'px-0.5'} grow flex-col items-start gap-1`}>
         <div className='flex items-center gap-1'>
