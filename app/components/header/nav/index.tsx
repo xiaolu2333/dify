@@ -47,7 +47,7 @@ const Nav = ({
   return (
     <div className={`
       mr-0 flex h-8 shrink-0 items-center rounded-xl px-0.5 text-sm font-medium sm:mr-3
-      ${isActivated && 'bg-components-main-nav-nav-button-bg-active font-semibold shadow-md'}
+      ${isActivated && 'bg-components-main-nav-nav-button-bg-active font-semibold'}
       ${!curNav && !isActivated && 'hover:bg-components-main-nav-nav-button-bg-hover'}
     `}>
       <Link href={link + (linkLastSearchParams && `?${linkLastSearchParams}`)}>
