@@ -1,19 +1,22 @@
 'use client'
-import { useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useRouter, useSearchParams } from 'next/navigation'
+import {useCallback, useState} from 'react'
+import {useTranslation} from 'react-i18next'
+import {useRouter, useSearchParams} from 'next/navigation'
 import cn from 'classnames'
-import { RiCheckboxCircleFill } from '@remixicon/react'
-import { useCountDown } from 'ahooks'
+import {RiCheckboxCircleFill} from '@remixicon/react'
+import {useCountDown} from 'ahooks'
 import Button from '@/app/components/base/button'
-import { changePasswordWithToken } from '@/service/common'
+import {changePasswordWithToken} from '@/service/common'
 import Toast from '@/app/components/base/toast'
 import Input from '@/app/components/base/input'
+import {
+  RiEyeLine, RiEyeOffLine
+} from '@remixicon/react'
 
 const validPassword = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/
 
 const ChangePasswordForm = () => {
-  const { t } = useTranslation()
+  const {t} = useTranslation()
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = decodeURIComponent(searchParams.get('token') || '')
@@ -79,8 +82,7 @@ const ChangePasswordForm = () => {
       })
       setShowSuccess(true)
       setLeftTime(AUTO_REDIRECT_TIME)
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error)
     }
   }, [password, token, valid, confirmPassword])
@@ -125,7 +127,8 @@ const ChangePasswordForm = () => {
                       variant='ghost'
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? '👀' : '😝'}
+                      {showPassword ? <RiEyeLine className='h-4 w-4 text-text-tertiary'/> :
+                        <RiEyeOffLine className='h-4 w-4 text-text-tertiary'/>}
                     </Button>
                   </div>
                 </div>
@@ -150,7 +153,8 @@ const ChangePasswordForm = () => {
                       variant='ghost'
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     >
-                      {showConfirmPassword ? '👀' : '😝'}
+                      {showPassword ? <RiEyeLine className='h-4 w-4 text-text-tertiary'/> :
+                        <RiEyeOffLine className='h-4 w-4 text-text-tertiary'/>}
                     </Button>
                   </div>
                 </div>
@@ -171,8 +175,9 @@ const ChangePasswordForm = () => {
       {showSuccess && (
         <div className="flex flex-col md:w-[400px]">
           <div className="mx-auto w-full">
-            <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-components-panel-border-subtle font-bold shadow-lg">
-              <RiCheckboxCircleFill className='h-6 w-6 text-text-success' />
+            <div
+              className="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-components-panel-border-subtle font-bold shadow-lg">
+              <RiCheckboxCircleFill className='h-6 w-6 text-text-success'/>
             </div>
             <h2 className="title-4xl-semi-bold text-text-primary">
               {t('login.passwordChangedTip')}

@@ -1,31 +1,34 @@
 'use client'
-import React, { useCallback, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useDebounceFn } from 'ahooks'
+import React, {useCallback, useEffect} from 'react'
+import {useTranslation} from 'react-i18next'
+import {useDebounceFn} from 'ahooks'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import {useRouter} from 'next/navigation'
 
-import type { SubmitHandler } from 'react-hook-form'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import type {SubmitHandler} from 'react-hook-form'
+import {useForm} from 'react-hook-form'
+import {z} from 'zod'
+import {zodResolver} from '@hookform/resolvers/zod'
 import Loading from '../components/base/loading'
 import classNames from '@/utils/classnames'
 import Button from '@/app/components/base/button'
 
-import { fetchInitValidateStatus, fetchSetupStatus, setup } from '@/service/common'
-import type { InitValidateStatusResponse, SetupStatusResponse } from '@/models/common'
+import {fetchInitValidateStatus, fetchSetupStatus, setup} from '@/service/common'
+import type {InitValidateStatusResponse, SetupStatusResponse} from '@/models/common'
 import useDocumentTitle from '@/hooks/use-document-title'
+import {
+  RiEyeLine, RiEyeOffLine
+} from '@remixicon/react'
 
 const validPassword = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/
 
 const accountFormSchema = z.object({
   email: z
     .string()
-    .min(1, { message: 'login.error.emailInValid' })
+    .min(1, {message: 'login.error.emailInValid'})
     .email('login.error.emailInValid'),
-  name: z.string().min(1, { message: 'login.error.nameEmpty' }),
+  name: z.string().min(1, {message: 'login.error.nameEmpty'}),
   password: z.string().min(8, {
     message: 'login.error.passwordLengthInValid',
   }).regex(validPassword, 'login.error.passwordInvalid'),
@@ -35,14 +38,14 @@ type AccountFormValues = z.infer<typeof accountFormSchema>
 
 const InstallForm = () => {
   useDocumentTitle('')
-  const { t } = useTranslation()
+  const {t} = useTranslation()
   const router = useRouter()
   const [showPassword, setShowPassword] = React.useState(false)
   const [loading, setLoading] = React.useState(true)
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: {errors, isSubmitting},
   } = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues: {
@@ -66,14 +69,14 @@ const InstallForm = () => {
     handleSubmit(onSubmit)()
   }
 
-  const { run: debouncedHandleKeyDown } = useDebounceFn(
+  const {run: debouncedHandleKeyDown} = useDebounceFn(
     (e: React.KeyboardEvent) => {
       if (e.key === 'Enter') {
         e.preventDefault()
         handleSetting()
       }
     },
-    { wait: 200 },
+    {wait: 200},
   )
 
   const handleKeyDown = useCallback(debouncedHandleKeyDown, [debouncedHandleKeyDown])
@@ -83,8 +86,7 @@ const InstallForm = () => {
       if (res.step === 'finished') {
         localStorage.setItem('setup_status', 'finished')
         router.push('/signin')
-      }
-      else {
+      } else {
         fetchInitValidateStatus().then((res: InitValidateStatusResponse) => {
           if (res.status === 'not_started')
             router.push('/init')
@@ -96,7 +98,7 @@ const InstallForm = () => {
 
   return (
     loading
-      ? <Loading />
+      ? <Loading/>
       : <>
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="text-[32px] font-bold text-text-primary">{t('login.setAdminAccount')}</h2>
@@ -106,7 +108,8 @@ const InstallForm = () => {
           <div className="relative">
             <form onSubmit={handleSubmit(onSubmit)} onKeyDown={handleKeyDown}>
               <div className='mb-5'>
-                <label htmlFor="email" className="my-2 flex items-center justify-between text-sm font-medium text-text-primary">
+                <label htmlFor="email"
+                       className="my-2 flex items-center justify-between text-sm font-medium text-text-primary">
                   {t('login.email')}
                 </label>
                 <div className="mt-1 rounded-md shadow-sm">
@@ -121,7 +124,8 @@ const InstallForm = () => {
               </div>
 
               <div className='mb-5'>
-                <label htmlFor="name" className="my-2 flex items-center justify-between text-sm font-medium text-text-primary">
+                <label htmlFor="name"
+                       className="my-2 flex items-center justify-between text-sm font-medium text-text-primary">
                   {t('login.name')}
                 </label>
                 <div className="relative mt-1 rounded-md shadow-sm">
@@ -135,7 +139,8 @@ const InstallForm = () => {
               </div>
 
               <div className='mb-5'>
-                <label htmlFor="password" className="my-2 flex items-center justify-between text-sm font-medium text-text-primary">
+                <label htmlFor="password"
+                       className="my-2 flex items-center justify-between text-sm font-medium text-text-primary">
                   {t('login.password')}
                 </label>
                 <div className="relative mt-1 rounded-md shadow-sm">
@@ -152,7 +157,8 @@ const InstallForm = () => {
                       onClick={() => setShowPassword(!showPassword)}
                       className="text-text-quaternary hover:text-text-tertiary focus:text-text-tertiary focus:outline-none"
                     >
-                      {showPassword ? '👀' : '😝'}
+                      {showPassword ? <RiEyeLine className='h-4 w-4 text-text-tertiary'/> :
+                        <RiEyeOffLine className='h-4 w-4 text-text-tertiary'/>}
                     </button>
                   </div>
                 </div>

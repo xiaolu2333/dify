@@ -1,15 +1,19 @@
 import Link from 'next/link'
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useContext } from 'use-context-selector'
+import {useState} from 'react'
+import {useTranslation} from 'react-i18next'
+import {useRouter, useSearchParams} from 'next/navigation'
+import {useContext} from 'use-context-selector'
 import Button from '@/app/components/base/button'
 import Toast from '@/app/components/base/toast'
-import { emailRegex } from '@/config'
-import { login } from '@/service/common'
+import {emailRegex} from '@/config'
+import {login} from '@/service/common'
 import Input from '@/app/components/base/input'
 import I18NContext from '@/context/i18n'
-import { noop } from 'lodash-es'
+import {noop} from 'lodash-es'
+
+import {
+  RiEyeLine, RiEyeOffLine
+} from '@remixicon/react'
 
 type MailAndPasswordAuthProps = {
   isInvite: boolean
@@ -19,9 +23,9 @@ type MailAndPasswordAuthProps = {
 
 const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/
 
-export default function MailAndPasswordAuth({ isInvite, isEmailSetup, allowRegistration }: MailAndPasswordAuthProps) {
-  const { t } = useTranslation()
-  const { locale } = useContext(I18NContext)
+export default function MailAndPasswordAuth({isInvite, isEmailSetup, allowRegistration}: MailAndPasswordAuthProps) {
+  const {t} = useTranslation()
+  const {locale} = useContext(I18NContext)
   const router = useRouter()
   const searchParams = useSearchParams()
   const [showPassword, setShowPassword] = useState(false)
@@ -32,7 +36,7 @@ export default function MailAndPasswordAuth({ isInvite, isEmailSetup, allowRegis
   const [isLoading, setIsLoading] = useState(false)
   const handleEmailPasswordLogin = async () => {
     if (!email) {
-      Toast.notify({ type: 'error', message: t('login.error.emailEmpty') })
+      Toast.notify({type: 'error', message: t('login.error.emailEmpty')})
       return
     }
     if (!emailRegex.test(email)) {
@@ -43,7 +47,7 @@ export default function MailAndPasswordAuth({ isInvite, isEmailSetup, allowRegis
       return
     }
     if (!password?.trim()) {
-      Toast.notify({ type: 'error', message: t('login.error.passwordEmpty') })
+      Toast.notify({type: 'error', message: t('login.error.passwordEmpty')})
       return
     }
     if (!passwordRegex.test(password)) {
@@ -70,36 +74,30 @@ export default function MailAndPasswordAuth({ isInvite, isEmailSetup, allowRegis
       if (res.result === 'success') {
         if (isInvite) {
           router.replace(`/signin/invite-settings?${searchParams.toString()}`)
-        }
-        else {
+        } else {
           localStorage.setItem('console_token', res.data.access_token)
           localStorage.setItem('refresh_token', res.data.refresh_token)
           router.replace('/apps')
         }
-      }
-      else if (res.code === 'account_not_found') {
+      } else if (res.code === 'account_not_found') {
         if (allowRegistration) {
           const params = new URLSearchParams()
           params.append('email', encodeURIComponent(email))
           params.append('token', encodeURIComponent(res.data))
           router.replace(`/reset-password/check-code?${params.toString()}`)
-        }
-        else {
+        } else {
           Toast.notify({
             type: 'error',
             message: t('login.error.registrationNotAllowed'),
           })
         }
-      }
-      else {
+      } else {
         Toast.notify({
           type: 'error',
           message: res.data,
         })
       }
-    }
-
-    finally {
+    } finally {
       setIsLoading(false)
     }
   }
@@ -155,7 +153,8 @@ export default function MailAndPasswordAuth({ isInvite, isEmailSetup, allowRegis
             variant='ghost'
             onClick={() => setShowPassword(!showPassword)}
           >
-            {showPassword ? '👀' : '😝'}
+            {showPassword ? <RiEyeLine className='h-4 w-4 text-text-tertiary'/> :
+              <RiEyeOffLine className='h-4 w-4 text-text-tertiary'/>}
           </Button>
         </div>
       </div>
