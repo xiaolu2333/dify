@@ -62,7 +62,7 @@ COPY docker/entrypoint.sh ./entrypoint.sh
 
 
 # global runtime packages
-RUN npm add -g pm2 \
+RUN npm install -g pm2 \
     && mkdir /.pm2 \
     && chown -R 1001:0 /.pm2 /app/web \
     && chmod -R g=u /.pm2 /app/web
