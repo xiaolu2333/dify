@@ -6,7 +6,7 @@ LABEL maintainer="takatost@gmail.com"
 # RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 RUN apk add --no-cache tzdata
-RUN npm install -g npm@10.8.0
+RUN npm install -g npm
 ENV npm_HOME="/npm"
 ENV PATH="$npm_HOME:$PATH"
 
