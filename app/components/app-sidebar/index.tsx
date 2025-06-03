@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react'
-import { useShallow } from 'zustand/react/shallow'
-import { RiLayoutLeft2Line, RiLayoutRight2Line } from '@remixicon/react'
+import React, {useEffect} from 'react'
+import {useShallow} from 'zustand/react/shallow'
+import {RiLayoutLeft2Line, RiLayoutRight2Line} from '@remixicon/react'
 import NavLink from './navLink'
-import type { NavIcon } from './navLink'
+import type {NavIcon} from './navLink'
 import AppBasic from './basic'
 import AppInfo from './app-info'
 import DatasetInfo from './dataset-info'
-import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
-import { useStore as useAppStore } from '@/app/components/app/store'
+import useBreakpoints, {MediaType} from '@/hooks/use-breakpoints'
+import {useStore as useAppStore} from '@/app/components/app/store'
 import cn from '@/utils/classnames'
 
 export type IAppDetailNavProps = {
@@ -26,8 +26,17 @@ export type IAppDetailNavProps = {
   extraInfo?: (modeState: string) => React.ReactNode
 }
 
-const AppDetailNav = ({ title, desc, isExternal, icon, icon_background, navigation, extraInfo, iconType = 'app' }: IAppDetailNavProps) => {
-  const { appSidebarExpand, setAppSiderbarExpand } = useAppStore(useShallow(state => ({
+const AppDetailNav = ({
+                        title,
+                        desc,
+                        isExternal,
+                        icon,
+                        icon_background,
+                        navigation,
+                        extraInfo,
+                        iconType = 'app'
+                      }: IAppDetailNavProps) => {
+  const {appSidebarExpand, setAppSiderbarExpand} = useAppStore(useShallow(state => ({
     appSidebarExpand: state.appSidebarExpand,
     setAppSiderbarExpand: state.setAppSiderbarExpand,
   })))
@@ -53,6 +62,27 @@ const AppDetailNav = ({ title, desc, isExternal, icon, icon_background, navigati
         ${expand ? 'w-[216px]' : 'w-14'}
       `}
     >
+      {
+        !isMobile && (
+          <div
+            className={`
+              shrink-0 py-3
+              ${expand ? 'px-6' : 'px-4'}
+            `}
+          >
+            <div
+              className='flex h-6 w-6 cursor-pointer items-center justify-center'
+              onClick={() => handleToggle(appSidebarExpand)}
+            >
+              {
+                expand
+                  ? <RiLayoutRight2Line className='h-5 w-5 text-components-menu-item-text'/>
+                  : <RiLayoutLeft2Line className='h-5 w-5 text-components-menu-item-text'/>
+              }
+            </div>
+          </div>
+        )
+      }
       <div
         className={`
           shrink-0
@@ -60,7 +90,7 @@ const AppDetailNav = ({ title, desc, isExternal, icon, icon_background, navigati
         `}
       >
         {iconType === 'app' && (
-          <AppInfo expand={expand} />
+          <AppInfo expand={expand}/>
         )}
         {iconType === 'dataset' && (
           <DatasetInfo
@@ -84,7 +114,7 @@ const AppDetailNav = ({ title, desc, isExternal, icon, icon_background, navigati
         )}
       </div>
       <div className='px-4'>
-        <div className={cn('mx-auto mt-1 h-[1px] bg-divider-subtle', !expand && 'w-6')} />
+        <div className={cn('mx-auto mt-1 h-[1px] bg-divider-subtle', !expand && 'w-6')}/>
       </div>
       <nav
         className={`
@@ -94,31 +124,11 @@ const AppDetailNav = ({ title, desc, isExternal, icon, icon_background, navigati
       >
         {navigation.map((item, index) => {
           return (
-            <NavLink key={index} mode={appSidebarExpand} iconMap={{ selected: item.selectedIcon, normal: item.icon }} name={item.name} href={item.href} />
+            <NavLink key={index} mode={appSidebarExpand} iconMap={{selected: item.selectedIcon, normal: item.icon}}
+                     name={item.name} href={item.href}/>
           )
         })}
       </nav>
-      {
-        !isMobile && (
-          <div
-            className={`
-              shrink-0 py-3
-              ${expand ? 'px-6' : 'px-4'}
-            `}
-          >
-            <div
-              className='flex h-6 w-6 cursor-pointer items-center justify-center'
-              onClick={() => handleToggle(appSidebarExpand)}
-            >
-              {
-                expand
-                  ? <RiLayoutRight2Line className='h-5 w-5 text-components-menu-item-text' />
-                  : <RiLayoutLeft2Line className='h-5 w-5 text-components-menu-item-text' />
-              }
-            </div>
-          </div>
-        )
-      }
     </div>
   )
 }
