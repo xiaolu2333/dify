@@ -16,12 +16,11 @@ FROM base AS packages
 WORKDIR /app/web
 
 COPY package.json .
-COPY npm-lock.yaml .
 
 # if you located in China, you can use taobao registry to speed up
 # RUN npm install --frozen-lockfile --registry https://registry.npmmirror.com/
 
-RUN npm install --frozen-lockfile
+RUN npm install --force  --registry https://registry.npmmirror.com/
 
 # build resources
 FROM base AS builder
