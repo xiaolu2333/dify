@@ -176,7 +176,7 @@ const Apps = () => {
         </div>
       </div>
       {(data && data[0].total > 0)
-        ? <div className='relative grid grow grid-cols-1 content-start gap-4 px-12 pt-2 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5 2k:grid-cols-6'>
+        ? <div className='relative grid grow grid-cols-1 content-start gap-4 px-12 pt-2 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5 2k:grid-cols-6 bg-gradient-to-b from-white to-blue-500'>
           {isCurrentWorkspaceEditor
             && <NewAppCard ref={newAppCardRef} onSuccess={mutate} />}
           {data.map(({ data: apps }) => apps.map(app => (

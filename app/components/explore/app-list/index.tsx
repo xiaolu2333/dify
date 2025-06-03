@@ -1,26 +1,26 @@
 'use client'
 
-import React, { useCallback, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useContext } from 'use-context-selector'
+import React, {useCallback, useMemo, useState} from 'react'
+import {useTranslation} from 'react-i18next'
+import {useContext} from 'use-context-selector'
 import useSWR from 'swr'
-import { useDebounceFn } from 'ahooks'
+import {useDebounceFn} from 'ahooks'
 import s from './style.module.css'
 import cn from '@/utils/classnames'
 import ExploreContext from '@/context/explore-context'
-import type { App } from '@/models/explore'
+import type {App} from '@/models/explore'
 import Category from '@/app/components/explore/category'
 import AppCard from '@/app/components/explore/app-card'
-import { fetchAppDetail, fetchAppList } from '@/service/explore'
-import { useTabSearchParams } from '@/hooks/use-tab-searchparams'
+import {fetchAppDetail, fetchAppList} from '@/service/explore'
+import {useTabSearchParams} from '@/hooks/use-tab-searchparams'
 import CreateAppModal from '@/app/components/explore/create-app-modal'
-import type { CreateAppModalProps } from '@/app/components/explore/create-app-modal'
+import type {CreateAppModalProps} from '@/app/components/explore/create-app-modal'
 import Loading from '@/app/components/base/loading'
 import Input from '@/app/components/base/input'
 import {
   DSLImportMode,
 } from '@/models/app'
-import { useImportDSL } from '@/hooks/use-import-dsl'
+import {useImportDSL} from '@/hooks/use-import-dsl'
 import DSLConfirmModal from '@/app/components/app/create-from-dsl-modal/dsl-confirm-modal'
 
 type AppsProps = {
@@ -33,18 +33,18 @@ export enum PageType {
 }
 
 const Apps = ({
-  onSuccess,
-}: AppsProps) => {
-  const { t } = useTranslation()
-  const { hasEditPermission } = useContext(ExploreContext)
-  const allCategoriesEn = t('explore.apps.allCategories', { lng: 'en' })
+                onSuccess,
+              }: AppsProps) => {
+  const {t} = useTranslation()
+  const {hasEditPermission} = useContext(ExploreContext)
+  const allCategoriesEn = t('explore.apps.allCategories', {lng: 'en'})
 
   const [keywords, setKeywords] = useState('')
   const [searchKeywords, setSearchKeywords] = useState('')
 
-  const { run: handleSearch } = useDebounceFn(() => {
+  const {run: handleSearch} = useDebounceFn(() => {
     setSearchKeywords(keywords)
-  }, { wait: 500 })
+  }, {wait: 500})
 
   const handleKeywordsChange = (value: string) => {
     setKeywords(value)
@@ -58,11 +58,11 @@ const Apps = ({
   })
 
   const {
-    data: { categories, allList },
+    data: {categories, allList},
   } = useSWR(
     ['/explore/apps'],
     () =>
-      fetchAppList().then(({ categories, recommended_apps }) => ({
+      fetchAppList().then(({categories, recommended_apps}) => ({
         categories,
         allList: recommended_apps.sort((a, b) => a.position - b.position),
       })),
@@ -84,8 +84,7 @@ const Apps = ({
         return allList.filter(item => (item.app.mode === 'agent-chat'))
       else
         return allList.filter(item => (item.app.mode === 'workflow'))
-    }
-    else {
+    } else {
       if (!currentType)
         return allList.filter(item => item.category === currCategory)
       else if (currentType === 'chatbot')
@@ -119,13 +118,13 @@ const Apps = ({
   } = useImportDSL()
   const [showDSLConfirmModal, setShowDSLConfirmModal] = useState(false)
   const onCreate: CreateAppModalProps['onConfirm'] = async ({
-    name,
-    icon_type,
-    icon,
-    icon_background,
-    description,
-  }) => {
-    const { export_data } = await fetchAppDetail(
+                                                              name,
+                                                              icon_type,
+                                                              icon,
+                                                              icon_background,
+                                                              description,
+                                                            }) => {
+    const {export_data} = await fetchAppDetail(
       currApp?.app.id as string,
     )
     const payload = {
@@ -156,7 +155,7 @@ const Apps = ({
   if (!categories || categories.length === 0) {
     return (
       <div className="flex h-full items-center">
-        <Loading type="area" />
+        <Loading type="area"/>
       </div>
     )
   }
@@ -194,7 +193,7 @@ const Apps = ({
       </div>
 
       <div className={cn(
-        'relative mt-4 flex flex-1 shrink-0 grow flex-col overflow-auto pb-6',
+        'relative mt-4 flex flex-1 shrink-0 grow flex-col overflow-auto pb- bg-gradient-to-b from-white to-blue-500',
       )}>
         <nav
           className={cn(

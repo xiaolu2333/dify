@@ -86,7 +86,7 @@ const Container = () => {
   }, [currentWorkspace, router])
 
   return (
-    <div ref={containerRef} className='scroll-container relative flex grow flex-col overflow-y-auto bg-background-body'>
+    <div ref={containerRef} className='scroll-container relative flex grow flex-col overflow-y-auto bg-background-body  bg-gradient-to-b from-white to-blue-500'>
       <div className='sticky top-0 z-10 flex flex-wrap items-center justify-between gap-y-2 bg-background-body px-12 pb-2 pt-4 leading-[56px]'>
         <TabSliderNew
           value={activeTab}
@@ -127,7 +127,7 @@ const Container = () => {
       {activeTab === 'dataset' && (
         <>
           <Datasets containerRef={containerRef} tags={tagIDs} keywords={searchKeywords} includeAll={includeAll} />
-          {!systemFeatures.branding.enabled && <DatasetFooter />}
+          {/*{!systemFeatures.branding.enabled && <DatasetFooter />}*/}
           {showTagManagementModal && (
             <TagManagementModal type='knowledge' show={showTagManagementModal} />
           )}

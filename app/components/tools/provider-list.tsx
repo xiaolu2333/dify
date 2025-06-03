@@ -98,7 +98,7 @@ const ProviderList = () => {
           </div>
           {(filteredCollectionList.length > 0 || activeTab !== 'builtin') && (
             <div className={cn(
-              'relative grid shrink-0 grid-cols-1 content-start gap-4 px-12 pb-4 pt-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+              'relative grid shrink-0 grid-cols-1 content-start gap-4 px-12 pb-4 pt-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 bg-gradient-to-b from-white to-blue-500',
               !filteredCollectionList.length && activeTab === 'workflow' && 'grow',
             )}>
               {activeTab === 'api' && <CustomCreateCard onRefreshData={refetch} />}
