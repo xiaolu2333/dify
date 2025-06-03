@@ -1,12 +1,12 @@
 import {
   useCallback,
 } from 'react'
-import { useNodes } from 'reactflow'
+import {useNodes} from 'reactflow'
 import {
   useStore,
   useWorkflowStore,
 } from '../store'
-import type { StartNodeType } from '../nodes/start/types'
+import type {StartNodeType} from '../nodes/start/types'
 import {
   useNodesInteractions,
   useNodesReadOnly,
@@ -17,6 +17,7 @@ import RunAndHistory from './run-and-history'
 import EditingTitle from './editing-title'
 import EnvButton from './env-button'
 import VersionHistoryButton from './version-history-button'
+import Operator from "@/app/components/workflow/operator";
 
 export type HeaderInNormalProps = {
   components?: {
@@ -25,20 +26,24 @@ export type HeaderInNormalProps = {
   }
 }
 const HeaderInNormal = ({
-  components,
-}: HeaderInNormalProps) => {
+                          components,
+                        }: HeaderInNormalProps) => {
   const workflowStore = useWorkflowStore()
-  const { nodesReadOnly } = useNodesReadOnly()
-  const { handleNodeSelect } = useNodesInteractions()
+  const {nodesReadOnly} = useNodesReadOnly()
+  const {handleNodeSelect} = useNodesInteractions()
   const setShowWorkflowVersionHistoryPanel = useStore(s => s.setShowWorkflowVersionHistoryPanel)
   const setShowEnvPanel = useStore(s => s.setShowEnvPanel)
   const setShowDebugAndPreviewPanel = useStore(s => s.setShowDebugAndPreviewPanel)
   const nodes = useNodes<StartNodeType>()
   const selectedNode = nodes.find(node => node.data.selected)
-  const { handleBackupDraft } = useWorkflowRun()
+  const {handleBackupDraft} = useWorkflowRun()
+  const {
+    handleHistoryBack,
+    handleHistoryForward,
+  } = useNodesInteractions()
 
   const onStartRestoring = useCallback(() => {
-    workflowStore.setState({ isRestoring: true })
+    workflowStore.setState({isRestoring: true})
     handleBackupDraft()
     // clear right panel
     if (selectedNode)
@@ -51,16 +56,20 @@ const HeaderInNormal = ({
 
   return (
     <>
-      <div>
-        <EditingTitle />
+      {/*<div>*/}
+      {/*  <EditingTitle />*/}
+      {/*</div>*/}
+      <div className='flex items-center align-middle'>
+        <Operator handleRedo={handleHistoryForward} handleUndo={handleHistoryBack}/>
       </div>
-      <div className='flex items-center gap-2'>
+
+      <div className='flex items-center align-middle gap-2'>
         {components?.left}
-        <EnvButton disabled={nodesReadOnly} />
-        <Divider type='vertical' className='mx-auto h-3.5' />
-        <RunAndHistory />
+        <EnvButton disabled={nodesReadOnly}/>
+        <Divider type='vertical' className='mx-auto h-3.5'/>
+        <RunAndHistory/>
         {components?.middle}
-        <VersionHistoryButton onClick={onStartRestoring} />
+        <VersionHistoryButton onClick={onStartRestoring}/>
       </div>
     </>
   )

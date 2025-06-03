@@ -1,18 +1,18 @@
 'use client'
 
-import type { FC } from 'react'
+import type {FC} from 'react'
 import {
   memo,
   useCallback,
   useEffect,
   useRef,
 } from 'react'
-import { setAutoFreeze } from 'immer'
+import {setAutoFreeze} from 'immer'
 import {
   useEventListener,
 } from 'ahooks'
 import ReactFlow, {
-  Background,
+  Background, MiniMap,
   ReactFlowProvider,
   SelectionMode,
   useEdgesState,
@@ -48,13 +48,13 @@ import {
 } from './hooks'
 import CustomNode from './nodes'
 import CustomNoteNode from './note-node'
-import { CUSTOM_NOTE_NODE } from './note-node/constants'
+import {CUSTOM_NOTE_NODE} from './note-node/constants'
 import CustomIterationStartNode from './nodes/iteration-start'
-import { CUSTOM_ITERATION_START_NODE } from './nodes/iteration-start/constants'
+import {CUSTOM_ITERATION_START_NODE} from './nodes/iteration-start/constants'
 import CustomLoopStartNode from './nodes/loop-start'
-import { CUSTOM_LOOP_START_NODE } from './nodes/loop-start/constants'
+import {CUSTOM_LOOP_START_NODE} from './nodes/loop-start/constants'
 import CustomSimpleNode from './simple-node'
-import { CUSTOM_SIMPLE_NODE } from './simple-node/constants'
+import {CUSTOM_SIMPLE_NODE} from './simple-node/constants'
 import Operator from './operator'
 import CustomEdge from './custom-edge'
 import CustomConnectionLine from './custom-connection-line'
@@ -74,12 +74,13 @@ import {
   ITERATION_CHILDREN_Z_INDEX,
   WORKFLOW_DATA_UPDATE,
 } from './constants'
-import { WorkflowHistoryProvider } from './workflow-history-store'
-import { useEventEmitterContextContext } from '@/context/event-emitter'
+import {WorkflowHistoryProvider} from './workflow-history-store'
+import {useEventEmitterContextContext} from '@/context/event-emitter'
 import Confirm from '@/app/components/base/confirm'
 import DatasetsDetailProvider from './datasets-detail-store/provider'
-import { HooksStoreContextProvider } from './hooks-store'
-import type { Shape as HooksStoreShape } from './hooks-store'
+import {HooksStoreContextProvider} from './hooks-store'
+import type {Shape as HooksStoreShape} from './hooks-store'
+import ZoomInOut from "@/app/components/workflow/operator/zoom-in-out";
 
 const nodeTypes = {
   [CUSTOM_NODE]: CustomNode,
@@ -100,12 +101,12 @@ export type WorkflowProps = {
   onWorkflowDataUpdate?: (v: any) => void
 }
 export const Workflow: FC<WorkflowProps> = memo(({
-  nodes: originalNodes,
-  edges: originalEdges,
-  viewport,
-  children,
-  onWorkflowDataUpdate,
-}) => {
+                                                   nodes: originalNodes,
+                                                   edges: originalEdges,
+                                                   viewport,
+                                                   children,
+                                                   onWorkflowDataUpdate,
+                                                 }) => {
   const workflowContainerRef = useRef<HTMLDivElement>(null)
   const workflowStore = useWorkflowStore()
   const reactflow = useReactFlow()
@@ -124,9 +125,9 @@ export const Workflow: FC<WorkflowProps> = memo(({
     handleSyncWorkflowDraft,
     syncWorkflowDraftWhenPageClose,
   } = useNodesSyncDraft()
-  const { workflowReadOnly } = useWorkflowReadOnly()
-  const { nodesReadOnly } = useNodesReadOnly()
-  const { eventEmitter } = useEventEmitterContextContext()
+  const {workflowReadOnly} = useWorkflowReadOnly()
+  const {nodesReadOnly} = useNodesReadOnly()
+  const {eventEmitter} = useEventEmitterContextContext()
 
   eventEmitter?.useSubscription((v: any) => {
     if (v.type === WORKFLOW_DATA_UPDATE) {
@@ -160,7 +161,7 @@ export const Workflow: FC<WorkflowProps> = memo(({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const { handleRefreshWorkflowDraft } = useWorkflowRefreshDraft()
+  const {handleRefreshWorkflowDraft} = useWorkflowRefreshDraft()
   const handleSyncWorkflowDraftWhenPageClose = useCallback(() => {
     if (document.visibilityState === 'hidden')
       syncWorkflowDraftWhenPageClose()
@@ -200,7 +201,7 @@ export const Workflow: FC<WorkflowProps> = memo(({
       })
     }
   })
-  const { handleFetchAllTools } = useFetchToolsData()
+  const {handleFetchAllTools} = useFetchToolsData()
   useEffect(() => {
     handleFetchAllTools('builtin')
     handleFetchAllTools('custom')
@@ -265,12 +266,23 @@ export const Workflow: FC<WorkflowProps> = memo(({
       `}
       ref={workflowContainerRef}
     >
-      <SyncingDataModal />
-      <CandidateNode />
-      <Operator handleRedo={handleHistoryForward} handleUndo={handleHistoryBack} />
-      <PanelContextmenu />
-      <NodeContextmenu />
-      <HelpLine />
+      <SyncingDataModal/>
+      <CandidateNode/>
+      {/*<Operator handleRedo={handleHistoryForward} handleUndo={handleHistoryBack} />*/}
+      <MiniMap
+        pannable
+        zoomable
+        style={{
+          width: 102,
+          height: 72,
+        }}
+        maskColor='var(--color-workflow-minimap-bg)'
+        className='!absolute !bottom-14 !left-4 z-[9] !m-0 !h-[72px] !w-[102px] !rounded-lg !border-[0.5px]
+        !border-divider-subtle !bg-background-default-subtle'
+      />
+      <PanelContextmenu/>
+      <NodeContextmenu/>
+      <HelpLine/>
       {
         !!showConfirm && (
           <Confirm
@@ -282,7 +294,7 @@ export const Workflow: FC<WorkflowProps> = memo(({
           />
         )
       }
-      <LimitTips />
+      <LimitTips/>
       {children}
       <ReactFlow
         nodeTypes={nodeTypes}
@@ -308,7 +320,7 @@ export const Workflow: FC<WorkflowProps> = memo(({
         onPaneContextMenu={handlePaneContextMenu}
         connectionLineComponent={CustomConnectionLine}
         // TODO: For LOOP node, how to distinguish between ITERATION and LOOP here? Maybe both are the same?
-        connectionLineContainerStyle={{ zIndex: ITERATION_CHILDREN_Z_INDEX }}
+        connectionLineContainerStyle={{zIndex: ITERATION_CHILDREN_Z_INDEX}}
         defaultViewport={viewport}
         multiSelectionKeyCode={null}
         deleteKeyCode={null}
@@ -342,9 +354,9 @@ type WorkflowWithInnerContextProps = WorkflowProps & {
   hooksStore?: Partial<HooksStoreShape>
 }
 export const WorkflowWithInnerContext = memo(({
-  hooksStore,
-  ...restProps
-}: WorkflowWithInnerContextProps) => {
+                                                hooksStore,
+                                                ...restProps
+                                              }: WorkflowWithInnerContextProps) => {
   return (
     <HooksStoreContextProvider {...hooksStore}>
       <Workflow {...restProps} />
@@ -355,19 +367,19 @@ export const WorkflowWithInnerContext = memo(({
 type WorkflowWithDefaultContextProps =
   Pick<WorkflowProps, 'edges' | 'nodes'>
   & {
-    children: React.ReactNode
-  }
+  children: React.ReactNode
+}
 
 const WorkflowWithDefaultContext = ({
-  nodes,
-  edges,
-  children,
-}: WorkflowWithDefaultContextProps) => {
+                                      nodes,
+                                      edges,
+                                      children,
+                                    }: WorkflowWithDefaultContextProps) => {
   return (
     <ReactFlowProvider>
       <WorkflowHistoryProvider
         nodes={nodes}
-        edges={edges} >
+        edges={edges}>
         <DatasetsDetailProvider nodes={nodes}>
           {children}
         </DatasetsDetailProvider>

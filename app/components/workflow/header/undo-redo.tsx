@@ -31,7 +31,7 @@ const UndoRedo: FC<UndoRedoProps> = ({ handleUndo, handleRedo }) => {
   const { nodesReadOnly } = useNodesReadOnly()
 
   return (
-    <div className='flex items-center space-x-0.5 rounded-lg border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-lg backdrop-blur-[5px]'>
+    <div className='flex items-center space-x-0.5 rounded-lg border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-sm backdrop-blur-[5px]'>
       <TipPopup title={t('workflow.common.undo')!} shortcuts={['ctrl', 'z']}>
         <div
           data-tooltip-id='workflow.undo'

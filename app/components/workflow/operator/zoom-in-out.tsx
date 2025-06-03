@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import type {FC} from 'react'
 import {
   Fragment,
   memo,
@@ -9,7 +9,7 @@ import {
   RiZoomInLine,
   RiZoomOutLine,
 } from '@remixicon/react'
-import { useTranslation } from 'react-i18next'
+import {useTranslation} from 'react-i18next'
 import {
   useReactFlow,
   useViewport,
@@ -41,15 +41,15 @@ enum ZoomType {
 }
 
 const ZoomInOut: FC = () => {
-  const { t } = useTranslation()
+  const {t} = useTranslation()
   const {
     zoomIn,
     zoomOut,
     zoomTo,
     fitView,
   } = useReactFlow()
-  const { zoom } = useViewport()
-  const { handleSyncWorkflowDraft } = useNodesSyncDraft()
+  const {zoom} = useViewport()
+  const {handleSyncWorkflowDraft} = useNodesSyncDraft()
   const [open, setOpen] = useState(false)
   const {
     workflowReadOnly,
@@ -132,7 +132,7 @@ const ZoomInOut: FC = () => {
       <PortalToFollowElemTrigger asChild>
         <div className={`
           h-9 cursor-pointer rounded-lg border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg
-          p-0.5 text-[13px] shadow-lg backdrop-blur-[5px]
+          p-0.5 text-[13px] shadow-sm backdrop-blur-[5px]
           hover:bg-state-base-hover
           ${workflowReadOnly && '!cursor-not-allowed opacity-50'}
         `}>
