@@ -6,9 +6,9 @@ LABEL maintainer="takatost@gmail.com"
 # RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 RUN apk add --no-cache tzdata
-RUN npm install -g pnpm@10.8.0
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
+RUN npm install -g npm@10.8.0
+ENV npm_HOME="/npm"
+ENV PATH="$npm_HOME:$PATH"
 
 
 # install packages
@@ -17,12 +17,12 @@ FROM base AS packages
 WORKDIR /app/web
 
 COPY package.json .
-COPY pnpm-lock.yaml .
+COPY npm-lock.yaml .
 
 # if you located in China, you can use taobao registry to speed up
-# RUN pnpm install --frozen-lockfile --registry https://registry.npmmirror.com/
+# RUN npm install --frozen-lockfile --registry https://registry.npmmirror.com/
 
-RUN pnpm install --frozen-lockfile
+RUN npm install --frozen-lockfile
 
 # build resources
 FROM base AS builder
@@ -31,7 +31,7 @@ COPY --from=packages /app/web/ .
 COPY . .
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN pnpm build
+RUN npm build
 
 
 # production stage
@@ -63,7 +63,7 @@ COPY docker/entrypoint.sh ./entrypoint.sh
 
 
 # global runtime packages
-RUN pnpm add -g pm2 \
+RUN npm add -g pm2 \
     && mkdir /.pm2 \
     && chown -R 1001:0 /.pm2 /app/web \
     && chmod -R g=u /.pm2 /app/web
